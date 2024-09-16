@@ -1,8 +1,8 @@
 import type { Config } from "~/types";
 
 export const configDefault: Config = {
-	title: "活版印字",
-	author: "Typography",
+	title: "隐形游乐场",
+	author: "Sakoamc",
 	desc: "Rediscory the beauty of typography",
 	website: "https://astro-theme-typography.vercel.app/",
 	locale: "en-us",
