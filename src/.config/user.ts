@@ -66,7 +66,7 @@ export const userConfig: Partial<UserConfig> = {
   },
   comment: {
     twikoo: {
-      envId: 'https://twikoo-lmzq5uz2i-ycchan2001s-projects.vercel.app/'
+      envId: 'https://twikoo-seven-gules.vercel.app/'
     }
   },
   rss: {
