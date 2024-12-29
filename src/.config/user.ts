@@ -25,7 +25,7 @@ export const userConfig: Partial<UserConfig> = {
     navLinks: [
       {
         name: 'Posts',
-        href: '/posts/page/1',
+        href: '/',
       },
       {
         name: 'Archive',
@@ -40,18 +40,18 @@ export const userConfig: Partial<UserConfig> = {
         href: '/about',
       },
     ],
-    categoryMap: [{ name: '胡适', path: 'hu-shi' }],
+    categoryMap: [{ name: '周记', path: 'weekly' }],
   },
   appearance: {
     theme: 'light',
     locale: 'zh-cn',
     colorsLight: {
-      foreground: '#2e405b',
+      primary: '#2e405b',
       background: '#ffffff',
     },
     colorsDark: {
-      foreground: '#ffffff',
-      background: '#2e405b',
+      primary: '#FFFFFF',
+      background: '#232222',
     },
     fonts: {
       header:
@@ -65,10 +65,19 @@ export const userConfig: Partial<UserConfig> = {
     link: [],
   },
   comment: {
-    // disqus: { shortname: "typography-astro" },
+    twikoo: {
+      envId: 'https://twikoo-lmzq5uz2i-ycchan2001s-projects.vercel.app/'
+    }
   },
   rss: {
     fullText: true,
+  },
+  analytics: {
+    googleAnalyticsId: '',
+    umamiAnalyticsId: '',
+  },
+  latex: {
+    katex: false,
   },
 }
 // Override the default config here
