@@ -7,6 +7,7 @@ const posts = defineCollection({
     z.object({
       title: z.string(),
       pubDate: z.coerce.date(),
+      modDate: z.coerce.date().optional(),
       categories: z.array(z.string()),
       draft: z.boolean().default(false).optional(),
       description: z.string().optional(),
@@ -18,6 +19,7 @@ const posts = defineCollection({
       commentsUrl: z.string().optional(),
       source: z.optional(z.object({ url: z.string(), title: z.string() })),
       enclosure: z.optional(z.object({ url: z.string(), length: z.number(), type: z.string() })),
+      pin: z.boolean().default(false).optional(),
     }),
 })
 
