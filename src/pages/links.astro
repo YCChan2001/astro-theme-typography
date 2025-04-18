@@ -4,7 +4,7 @@ import LayoutDefault from '~/layouts/LayoutDefault.astro'
 import { formatDate } from '~/utils'
 
 const { translate: t } = Astro.locals
-const aboutPost = await getEntry('links')
+const aboutPost = await getEntry('links','test')
 if (!aboutPost) {
   throw new Error('No links post found')
 }
