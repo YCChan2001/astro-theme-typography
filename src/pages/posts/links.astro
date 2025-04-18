@@ -1,0 +1,45 @@
+---
+import LayoutDefault from '~/layouts/LayoutDefault.astro';
+import { getCollection } from 'astro:content';
+
+const links = await getCollection('links');
+---
+
+<LayoutDefault title="友情链接">
+  <header>
+    <h1>友情链接</h1>
+    <p>这里是我收集的一些有用的链接。</p>
+  </header>
+  <main>
+    <ul>
+      {links.map((link) => (
+        <li>
+          <a href={link.data.url} target="_blank" rel="noopener noreferrer">
+            {link.data.title}
+          </a>
+          {link.data.description && <p>{link.data.description}</p>}
+        </li>
+      ))}
+    </ul>
+  </main>
+</LayoutDefault>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 0.5rem;
+  }
+  a {
+    font-weight: bold;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
