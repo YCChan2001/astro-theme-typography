@@ -1,8 +1,11 @@
 ---
 import LayoutDefault from '~/layouts/LayoutDefault.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { type linksCollection } from '~/.config' // 确保路径正确
 
-const links = await getCollection('links');
+type LinkEntry = CollectionEntry<typeof linksCollection>;
+
+const links: LinkEntry[] = await getCollection('links');
 ---
 
 <LayoutDefault title="友情链接">
@@ -10,7 +13,7 @@ const links = await getCollection('links');
     <h1>友情链接</h1>
     <ul>
       {links.map((link) => (
-        <li key={link.slug}>
+        <li key={link.id}> {/* 使用 link.id 作为 key */}
           <a href={link.data.url} target="_blank" rel="noopener noreferrer">
             {link.data.title}
           </a>
