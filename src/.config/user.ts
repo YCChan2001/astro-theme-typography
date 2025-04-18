@@ -36,6 +36,10 @@ export const userConfig: Partial<UserConfig> = {
         href: '/categories',
       },
       {
+        name: 'Links',
+        href: '/links',
+      },
+      {
         name: 'About',
         href: '/about',
       },
