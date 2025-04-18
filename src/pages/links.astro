@@ -1,27 +1,42 @@
 ---
-import { getEntry, render } from 'astro:content'
-import LayoutDefault from '~/layouts/LayoutDefault.astro'
-import { formatDate } from '~/utils'
+import LayoutDefault from '~/layouts/LayoutDefault.astro';
+import { getCollection } from 'astro:content';
 
-const { translate: t } = Astro.locals
-const aboutPost = await getEntry('links','test')
-if (!aboutPost) {
-  throw new Error('No links post found')
-}
-const { Content } = await render(aboutPost)
+const links = await getCollection('links');
 ---
 
-<LayoutDefault>
-  <header flex="~ col gap-2">
-    <h1 class="post-title">
-      <a class="not-prose">{aboutPost.data.title}</a>
-    </h1>
-    <div class="text-3.5">
-      <span>{t('posted_at')}</span>
-      <time>{formatDate(aboutPost.data.pubDate)}</time>
-    </div>
-  </header>
-  <article class="prose">
-    <Content />
-  </article>
+<LayoutDefault title="友情链接">
+  <main>
+    <h1>友情链接</h1>
+    <ul>
+      {links.map((link) => (
+        <li key={link.slug}>
+          <a href={link.data.url} target="_blank" rel="noopener noreferrer">
+            {link.data.title}
+          </a>
+          {link.data.description && <small> - {link.data.description}</small>}
+        </li>
+      ))}
+    </ul>
+  </main>
 </LayoutDefault>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    margin-bottom: 0.5rem;
+  }
+  a {
+    font-weight: bold;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  small {
+    color: #777;
+  }
+</style>
