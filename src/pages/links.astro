@@ -1,0 +1,27 @@
+---
+// links.astro
+
+const links = [
+  { href: "https://astro.build/", text: "Astro 官网" },
+  { href: "https://github.com/withastro/astro", text: "Astro GitHub 仓库" },
+  { href: "/about", text: "关于我们 (站内链接)" },
+];
+---
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>友情链接</title>
+</head>
+<body>
+  <h1>友情链接</h1>
+  <ul>
+    {links.map((link) => (
+      <li>
+        <a href={link.href}>{link.text}</a>
+      </li>
+    ))}
+  </ul>
+</body>
+</html>
