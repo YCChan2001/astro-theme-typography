@@ -7,62 +7,15 @@ const links = [
 ];
 ---
 
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>友情链接</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-    }
-    .header {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem; /* 对应 gap-2，但使用 rem 单位可能更灵活 */
-      margin-bottom: 20px;
-      align-items: center; /* 水平居中标题 */
-    }
-    .post-title {
-      font-size: 2rem; /* 调整标题字体大小 */
-      font-weight: bold;
-      color: #333; /* 设置标题颜色 */
-      text-decoration: none; /* 移除链接下划线 */
-    }
-    .text-3\.5 { /* 模仿 text-3.5 的效果 */
-      font-size: 1.125rem; /* 可以根据实际 text-3.5 的定义调整 */
-      color: #777;
-    }
-    .link-list {
-      list-style-type: none;
-      padding: 0;
-    }
-    .link-item {
-      margin-bottom: 10px;
-    }
-    .link-item a {
-      color: #007bff; /* 设置链接颜色 */
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .link-item a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1 class="post-title">
-      <a class="not-prose">友情链接</a>
-    </h1>
-  </div>
-  <ul class="link-list">
-    {links.map((link) => (
-      <li class="link-item">
-        <a href={link.href}>{link.text}</a>
-      </li>
-    ))}
-  </ul>
-</body>
-</html>
+<LayoutDefault>
+    <div class="flex flex-col gap-4 items-center mb-8">
+      <h1 class="text-3xl font-bold text-primary">友情链接</h1>
+    </div>
+    <ul class="list-none pl-0">
+      {links.map((link) => (
+        <li class="mb-4">
+          <a href={link.href} class="text-blue-500 hover:underline font-medium">{link.text}</a>
+        </li>
+      ))}
+    </ul>
+  </LayoutDefault>
