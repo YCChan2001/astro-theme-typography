@@ -1,9 +1,8 @@
 ---
 // links.astro
-
 const links = [
-  { href: "https://astro.build/", text: "Astro 官网" },
-  { href: "https://github.com/withastro/astro", text: "Astro GitHub 仓库" },
+  { href: "https://daily.sakoamc.com/YCChan2001", text: "sak个人记录" },
+  { href: "https://blog.wrihope.top/links", text: "Ating Life" },
   { href: "/about", text: "关于我们 (站内链接)" },
 ];
 ---
@@ -13,12 +12,54 @@ const links = [
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>友情链接</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem; /* 对应 gap-2，但使用 rem 单位可能更灵活 */
+      margin-bottom: 20px;
+      align-items: center; /* 水平居中标题 */
+    }
+    .post-title {
+      font-size: 2rem; /* 调整标题字体大小 */
+      font-weight: bold;
+      color: #333; /* 设置标题颜色 */
+      text-decoration: none; /* 移除链接下划线 */
+    }
+    .text-3\.5 { /* 模仿 text-3.5 的效果 */
+      font-size: 1.125rem; /* 可以根据实际 text-3.5 的定义调整 */
+      color: #777;
+    }
+    .link-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .link-item {
+      margin-bottom: 10px;
+    }
+    .link-item a {
+      color: #007bff; /* 设置链接颜色 */
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .link-item a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h1>友情链接</h1>
-  <ul>
+  <div class="header">
+    <h1 class="post-title">
+      <a class="not-prose">友情链接</a>
+    </h1>
+  </div>
+  <ul class="link-list">
     {links.map((link) => (
-      <li>
+      <li class="link-item">
         <a href={link.href}>{link.text}</a>
       </li>
     ))}
