@@ -5,9 +5,8 @@ pubDate: 2025-4-18
 Hi, I’m Sakoamc 👋
 
 
-- 00后小屁孩，豆制品爱好者  
-- 不懂技术，浅尝辄止  
-- 爱吃的水果：耙耙柑、香蕉  
-- 坐标：江苏某三线城市
-
+- Birth Year: White Wax Gold
+- Dietary Preference: Chun Jian Mandarin Orange(Pa Pa Gan Mandarin Orange), bananas, Some soy products, Roasted bran, Water spinach, Broccoli, Cauliflower...
+- Current Address: A small town in Jiangsu
+- Revered Person: Søren Aabye Kierkegaard, Chen Jiaying, Hins Cheung
 
