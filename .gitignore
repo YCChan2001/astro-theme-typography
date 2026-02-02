@@ -21,3 +21,12 @@ pnpm-debug.log*
 .DS_Store
 
 Markdown style guide.md
+
+# Cloudflare 的缓存文件夹
+.wrangler/
+
+# VS Code 的个人配置
+.vscode/
+
+# 一键发布脚本
+deploy.bat
