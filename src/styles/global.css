@@ -4,13 +4,15 @@
   --uno-fonts-ui: theme('fontFamily.ui');
   --uno-colors-shadow: theme('colors.shadow');
 }
+
 html {
   --at-apply: antialiased;
   --at-apply: 'bg-background c-primary font-ui text-shadow-color-shadow';
 
   text-shadow: 1px 1px 1px var(--uno-colors-shadow);
   background-size: 7px 7px;
-  background-image: linear-gradient(to right, var(--uno-colors-shadow) 1px, transparent 1px),
+  background-image:
+    linear-gradient(to right, var(--uno-colors-shadow) 1px, transparent 1px),
     linear-gradient(to bottom, var(--uno-colors-shadow) 1px, transparent 1px);
 }
 

@@ -1,0 +1,277 @@
+---
+export interface Props {
+  url: string
+  myRating?: string
+  myComment?: string
+  subtitle?: string
+}
+
+const { url, myRating, myComment, subtitle } = Astro.props
+
+let data = null
+
+if (url) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    })
+
+    if (response.ok) {
+      const html = await response.text()
+
+      const getMeta = (metaName: string) => {
+        const rgx = new RegExp(`<meta[^>]*property=["']og:${metaName}["'][^>]*content=["']([^"']*)["']`, 'i')
+        const match = html.match(rgx)
+        if (match) return match[1]
+
+        const rgxSwapped = new RegExp(`<meta[^>]*content=["']([^"']*)["'][^>]*property=["']og:${metaName}["']`, 'i')
+        const matchSwapped = html.match(rgxSwapped)
+        return matchSwapped ? matchSwapped[1] : null
+      }
+
+      const title = getMeta('title')
+      const image = getMeta('image')
+      const description = getMeta('description')
+
+      if (title) {
+        // 使用 wsrv.nl 智能缓存图片，解决国内手机端/无代理用户图片破裂无法加载的问题
+        const proxiedImage = image ? `https://wsrv.nl/?url=${encodeURIComponent(image)}` : null
+
+        data = {
+          title: title.replace(' - NeoDB', '').trim(),
+          image: proxiedImage,
+          description: description
+            ? description
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .trim()
+            : '暂无简介...',
+        }
+      }
+    }
+  } catch (error) {
+    console.error(`[NeoCard] 抓取失败: ${url}`)
+  }
+}
+---
+
+{
+  data ? (
+    <div class="neocard-container">
+      {/* 左侧：海报区 */}
+      {data.image && (
+        <a href={url} target="_blank" rel="noreferrer" class="neocard-poster-link">
+          <img src={data.image} alt={data.title} class="neocard-raw-poster" loading="lazy" />
+        </a>
+      )}
+
+      {/* 右侧：排版内容区 */}
+      <div class="neocard-text-layout">
+        <div class="neocard-heading-group">
+          <h4 class="neocard-title">
+            <a href={url} target="_blank" rel="noreferrer" class="neocard-title-link">
+              {data.title}
+            </a>
+          </h4>
+          {subtitle && <div class="neocard-subtitle">{subtitle}</div>}
+        </div>
+
+        {/* 个人评价便签盒 */}
+        {(myRating || myComment) && (
+          <div class="neocard-review-sticker">
+            {myRating && (
+              <div class="neocard-rating-row">
+                RATING: <span class="stars">{myRating}</span>
+              </div>
+            )}
+            {myComment && <p class="neocard-comment-row">“{myComment}”</p>}
+          </div>
+        )}
+
+        {/* 3. 官方简介：提高不透明度，加深字色，确保清晰好读 */}
+        <p class="neocard-excerpt">{data.description}</p>
+
+        {/* 2. 页脚移回右下角，并提升可见度 */}
+        <div class="neocard-footer-line">
+          <a href={url} target="_blank" rel="noreferrer" class="neocard-footer-link">
+            via neodb.social <span class="neocard-arrow">➔</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <a href={url} target="_blank" class="fallback-link">
+      🔗 查看书影音详情: {url}
+    </a>
+  )
+}
+
+<style>
+  .neocard-container {
+    display: flex;
+    flex-direction: row;
+
+    border: 1px solid var(--uno-colors-shadow, rgba(0, 0, 0, 0.12));
+    border-radius: 12px;
+    overflow: hidden;
+    isolation: isolate;
+
+    margin: 2rem 0;
+    /* 1. 微调内衬：上下收紧到 1rem，让字少的时候框子更加紧凑精致，字多时依然能自然撑开 */
+    padding: 1rem 1.2rem;
+    gap: 1.2rem;
+
+    background-color: color-mix(in srgb, var(--uno-colors-background, #fff) 96%, var(--uno-colors-primary, #000) 4%);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    transition:
+      transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .neocard-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .neocard-poster-link {
+    display: block;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  .neocard-raw-poster {
+    width: 95px; /* 稍微缩小图片基准，有利于短文字时框体更矮 */
+    height: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    display: block;
+  }
+
+  .neocard-text-layout {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem; /* 内部间距稍微收紧 */
+  }
+
+  .neocard-heading-group {
+    margin-bottom: 0.05rem;
+  }
+
+  .neocard-title {
+    font-family: var(--uno-fonts-ui), monospace !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+    line-height: 1.2;
+  }
+
+  .neocard-title-link {
+    color: var(--uno-colors-primary, #000) !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .neocard-title-link:hover {
+    border-bottom-color: var(--uno-colors-primary, #000);
+    background-color: transparent !important;
+    color: var(--uno-colors-primary, #000) !important;
+  }
+
+  .neocard-subtitle {
+    font-family: var(--uno-fonts-ui), monospace;
+    font-size: 0.78rem;
+    opacity: 0.45;
+    margin-top: 0.25rem;
+    font-weight: 600;
+  }
+
+  .neocard-review-sticker {
+    padding: 0.5rem 0.7rem;
+    background-color: rgba(0, 0, 0, 0.025);
+    border-radius: 8px;
+  }
+
+  .neocard-rating-row {
+    font-family: monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 0.1rem;
+    opacity: 0.5;
+  }
+
+  .neocard-rating-row .stars {
+    color: #fbbf24;
+    font-size: 0.8rem;
+  }
+
+  .neocard-comment-row {
+    font-size: 0.85rem !important;
+    line-height: 1.45;
+    font-weight: 600;
+    margin: 0 !important;
+  }
+
+  /* 3. 调整官方简介：不透明度由 0.32 提升至 0.52，颜色加深，阅读清晰不费眼 */
+  .neocard-excerpt {
+    font-size: 0.78rem !important;
+    line-height: 1.4;
+    opacity: 0.52;
+    margin: 0 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 2. 页脚定位：完美归位到右下角 */
+  .neocard-footer-line {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.1rem;
+  }
+
+  /* 2. 页脚不透明度由 0.3 提升至 0.5，更清晰显著 */
+  .neocard-footer-link {
+    font-size: 0.65rem;
+    opacity: 0.5;
+    font-family: monospace;
+    font-weight: bold;
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: opacity 0.2s ease;
+  }
+
+  .neocard-footer-link:hover {
+    opacity: 0.85;
+    background-color: transparent !important;
+  }
+
+  .neocard-arrow {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+
+  .neocard-container:hover .neocard-arrow {
+    transform: translateX(2px);
+  }
+
+  @media (max-width: 540px) {
+    .neocard-container {
+      flex-direction: row;
+      gap: 0.9rem;
+      padding: 0.8rem;
+    }
+    .neocard-raw-poster {
+      width: 68px;
+    }
+    .neocard-title {
+      font-size: 1.15rem !important;
+    }
+  }
+</style>
